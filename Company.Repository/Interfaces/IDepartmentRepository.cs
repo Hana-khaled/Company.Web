@@ -7,12 +7,8 @@ using System.Threading.Tasks;
 
 namespace Company.Repository.Interfaces
 {
-    public interface IDepartmentRepository
+    public interface IDepartmentRepository : IGenericRepository<Department>
     {
-        Department GetById(int id);
-        IEnumerable<Department> GetAll();
-        void Add(Department department);
-        void Update(Department department);
-        void Delete(Department department);
+        
     }
 }
