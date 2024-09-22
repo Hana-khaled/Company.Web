@@ -20,6 +20,7 @@ namespace Company.Web
             });
 
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 
             var app = builder.Build();
 
