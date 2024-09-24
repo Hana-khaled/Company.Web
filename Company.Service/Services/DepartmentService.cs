@@ -30,7 +30,7 @@ namespace Company.Service.Services
 
         public IEnumerable<Department> GetAll()
         {
-            return _departmentRepository.GetAll();
+            return _departmentRepository.GetAll()/*.Where(x=>x.IsDeleted != true)*/;//soft delete
         }
 
         public Department GetById(int? id)
