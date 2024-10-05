@@ -22,13 +22,17 @@ namespace Company.Web
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
+            //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 
             builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+            builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
-            builder.Services.AddScoped<IGenericRepository<Employee>, GenericRepository<Employee>>();
-            builder.Services.AddScoped<IGenericRepository<Department>, GenericRepository<Department>>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            //builder.Services.AddScoped<IGenericRepository<Employee>, GenericRepository<Employee>>();
+            //builder.Services.AddScoped<IGenericRepository<Department>, GenericRepository<Department>>();
 
             var app = builder.Build();
 
