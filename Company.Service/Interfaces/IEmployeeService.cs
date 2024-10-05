@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 
 namespace Company.Service.Interfaces
 {
-    internal interface IEmployeeService
+    public interface IEmployeeService
     {
         Employee GetById(int? id);
         IEnumerable<Employee> GetAll();
         void Add(Employee employee);
         void Update(Employee employee);
         void Delete(Employee employee);
+        IEnumerable<Employee> GetEmployeeByAddress(string address);
+        IEnumerable<Employee> GetEmployeeByName(string name);
     }
 }
