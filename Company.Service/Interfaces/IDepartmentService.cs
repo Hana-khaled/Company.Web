@@ -13,7 +13,7 @@ namespace Company.Service.Interfaces
         DepartmentDto GetById(int? id);
         IEnumerable<DepartmentDto> GetAll();
         void Add(DepartmentDto department);
-        void Update(DepartmentDto department);
+        void Update(Department department);
         void Delete(DepartmentDto department);
     }
 }

@@ -9,8 +9,10 @@ namespace Company.Service.Dto
 {
     public class DepartmentDto
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public ICollection<EmployeeDto> Employees { get; set; } = new List<EmployeeDto>();
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 }

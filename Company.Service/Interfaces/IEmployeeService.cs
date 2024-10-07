@@ -13,7 +13,7 @@ namespace Company.Service.Interfaces
         EmployeeDto GetById(int? id);
         IEnumerable<EmployeeDto> GetAll();
         void Add(EmployeeDto employee);
-        void Update(EmployeeDto employee);
+        void Update(Employee employee);
         void Delete(EmployeeDto employee);
         IEnumerable<EmployeeDto> GetEmployeeByAddress(string address);
         IEnumerable<EmployeeDto> GetEmployeeByName(string name);
