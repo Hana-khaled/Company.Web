@@ -26,7 +26,7 @@ namespace Company.Data.Contexts
         //    base.OnConfiguring(optionsBuilder);
         //}
 
-        public DbSet<Department> Departments;
-        public DbSet<Employee> Employees;
+        public DbSet<Department> Department { get; set; }
+        public DbSet<Employee> Employee { get; set; }
     }
 }

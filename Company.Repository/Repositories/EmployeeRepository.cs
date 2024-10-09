@@ -13,17 +13,24 @@ namespace Company.Repository.Repositories
     {
         // Constructor Injection
         private readonly CompanyDbContext _context;
-        
+
         public EmployeeRepository(CompanyDbContext context) : base(context)
         {
             _context = context;
         }
 
         public IEnumerable<Employee> GetEmployeeByAddress(string address)
-          => _context.Employees.Where(e => e.Address.Trim().ToLower().Contains(address.Trim().ToLower())).ToList();
+          => _context.Employee.Where(e => e.Address.Trim().ToLower().Contains(address.Trim().ToLower())).ToList();
 
         public IEnumerable<Employee> GetEmployeeByName(string name)
-        => _context.Employees.Where(e => e.Name.Trim().ToLower().Contains(name.Trim().ToLower())).ToList();
-        
+        {
+            string handelName = name.Trim().ToLower();
+            var result = _context.Employee.Where(e =>
+            e.Name.Trim().ToLower() == handelName ||
+            e.Email.Trim().ToLower() == handelName ||
+            e.PhoneNumber.Trim().ToLower() == handelName).ToList();
+            return result;
+        }
+
     }
 }

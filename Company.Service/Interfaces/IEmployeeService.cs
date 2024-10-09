@@ -15,7 +15,7 @@ namespace Company.Service.Interfaces
         void Add(EmployeeDto employee);
         void Update(Employee employee);
         void Delete(EmployeeDto employee);
-        IEnumerable<EmployeeDto> GetEmployeeByAddress(string address);
+        //IEnumerable<EmployeeDto> GetEmployeeByAddress(string address);
         IEnumerable<EmployeeDto> GetEmployeeByName(string name);
     }
 }

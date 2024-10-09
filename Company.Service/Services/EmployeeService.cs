@@ -2,6 +2,7 @@
 using Company.Data.Models;
 using Company.Repository.Interfaces;
 using Company.Service.Dto;
+using Company.Service.Helper;
 using Company.Service.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -39,7 +40,7 @@ namespace Company.Service.Services
             //    PhoneNumber = employeeDto.PhoneNumber
 
             //};
-
+            employeeDto.ImageUrl = DocumentSettings.UploadFile(employeeDto.Image, "images");
             Employee employee = _mapper.Map<Employee>(employeeDto);
             _unitOfWork.employeeRepository.Add(employee);
             _unitOfWork.Complete();
@@ -113,24 +114,24 @@ namespace Company.Service.Services
             return employeeDto;
         }
 
-        public IEnumerable<EmployeeDto> GetEmployeeByAddress(string address)
-        {
-            var Emp = _unitOfWork.employeeRepository.GetEmployeeByAddress(address);
-            //var mappedEmp = Emp.Select(x => new EmployeeDto
-            //{
-            //    Name = x.Name,
-            //    Age = x.Age,
-            //    Email = x.Email,
-            //    Address = x.Address,
-            //    DepartmentId = x.DepartmentId,
-            //    Salary = x.Salary,
-            //    HiringDate = x.HiringDate,
-            //    ImageUrl = x.ImageUrl,
-            //    PhoneNumber = x.PhoneNumber
-            //});
-            IEnumerable<EmployeeDto> mappedEmp = _mapper.Map<IEnumerable<EmployeeDto>>(Emp);
-            return mappedEmp;
-        }
+        //public IEnumerable<EmployeeDto> GetEmployeeByAddress(string address)
+        //{
+        //    var Emp = _unitOfWork.employeeRepository.GetEmployeeByAddress(address);
+        //    //var mappedEmp = Emp.Select(x => new EmployeeDto
+        //    //{
+        //    //    Name = x.Name,
+        //    //    Age = x.Age,
+        //    //    Email = x.Email,
+        //    //    Address = x.Address,
+        //    //    DepartmentId = x.DepartmentId,
+        //    //    Salary = x.Salary,
+        //    //    HiringDate = x.HiringDate,
+        //    //    ImageUrl = x.ImageUrl,
+        //    //    PhoneNumber = x.PhoneNumber
+        //    //});
+        //    IEnumerable<EmployeeDto> mappedEmp = _mapper.Map<IEnumerable<EmployeeDto>>(Emp);
+        //    return mappedEmp;
+        //}
 
         public IEnumerable<EmployeeDto> GetEmployeeByName(string name)
         {
