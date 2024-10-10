@@ -1,5 +1,7 @@
-﻿using Company.Data.Models;
+﻿using AutoMapper;
+using Company.Data.Models;
 using Company.Repository.Interfaces;
+using Company.Service.Dto;
 using Company.Service.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -12,30 +14,61 @@ namespace Company.Service.Services
     public class DepartmentService : IDepartmentService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public DepartmentService(IUnitOfWork unitOfWork)
+        public DepartmentService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public void Add(Department department)
+        public void Add(DepartmentDto departmentDto)
         {
+            //Department department = new Department
+            //{
+            //    Name = departmentDto.Name,
+            //    Code = departmentDto.Code,
+            //    CreatedAt = DateTime.Now,
+            //    Id = departmentDto.Id
+            //};
+
+            Department department = _mapper.Map<Department>(departmentDto);
             _unitOfWork.departmentRepository.Add(department);
+
             _unitOfWork.Complete();
         }
 
-        public void Delete(Department department)
+        public void Delete(DepartmentDto departmentDto)
         {
+            //Department department = new Department
+            //{
+            //    Name = departmentDto.Name,
+            //    Code = departmentDto.Code,
+            //    CreatedAt = DateTime.Now,
+            //    Id = departmentDto.Id
+            //};
+
+            Department department = _mapper.Map<Department>(departmentDto);
             _unitOfWork.departmentRepository.Delete(department);
+
             _unitOfWork.Complete();
         }
 
-        public IEnumerable<Department> GetAll()
+        public IEnumerable<DepartmentDto> GetAll()
         {
-            return _unitOfWork.departmentRepository.GetAll()/*.Where(x=>x.IsDeleted != true)*/;//soft delete
+            var departments = _unitOfWork.departmentRepository.GetAll().ToList();
+            //return departments.Select(x => new DepartmentDto
+            //{
+            //    Name = x.Name,
+            //    Code = x.Code,
+            //    Id = x.Id
+            //});
+            IEnumerable<DepartmentDto> mappedDept = _mapper.Map<IEnumerable<DepartmentDto>>(departments);
+            return mappedDept;
+            //return _unitOfWork.departmentRepository.GetAll()/*.Where(x=>x.IsDeleted != true)*/;//soft delete
         }
 
-        public Department GetById(int? id)
+        public DepartmentDto GetById(int? id)
         {
             if(id is null)
             {
@@ -46,7 +79,8 @@ namespace Company.Service.Services
             {
                 return null;
             }
-            return dept;
+            DepartmentDto mappedDept = _mapper.Map<DepartmentDto>(dept);
+            return mappedDept;
         }
 
         public void Update(Department department)
@@ -62,7 +96,7 @@ namespace Company.Service.Services
             dept.Code = department.Code;
             dept.Name = department.Name;
 
-            _unitOfWork.departmentRepository.Update(dept);
+            _unitOfWork.departmentRepository.Update(department);
             _unitOfWork.Complete();
         }
     }

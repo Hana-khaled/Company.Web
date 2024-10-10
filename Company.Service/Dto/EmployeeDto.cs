@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Company.Data.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,10 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Company.Data.Models
+namespace Company.Service.Dto
 {
-    public class Employee : BaseEntity
+    public class EmployeeDto
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public int Age { get; set; }
         public string Address { get; set; }
@@ -21,7 +23,9 @@ namespace Company.Data.Models
         [NotMapped]
         public IFormFile Image { get; set; }
         public string? ImageUrl { get; set; }
-        public Department? Department { get; set; }
+        public DepartmentDto? Department { get; set; }
         public int DepartmentId { get; set; }
+  
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 }

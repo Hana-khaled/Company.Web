@@ -1,4 +1,5 @@
 ﻿using Company.Data.Models;
+using Company.Service.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +10,12 @@ namespace Company.Service.Interfaces
 {
     public interface IEmployeeService
     {
-        Employee GetById(int? id);
-        IEnumerable<Employee> GetAll();
-        void Add(Employee employee);
+        EmployeeDto GetById(int? id);
+        IEnumerable<EmployeeDto> GetAll();
+        void Add(EmployeeDto employee);
         void Update(Employee employee);
-        void Delete(Employee employee);
-        IEnumerable<Employee> GetEmployeeByAddress(string address);
-        IEnumerable<Employee> GetEmployeeByName(string name);
+        void Delete(EmployeeDto employee);
+        //IEnumerable<EmployeeDto> GetEmployeeByAddress(string address);
+        IEnumerable<EmployeeDto> GetEmployeeByName(string name);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Company.Data.Models;
 using Company.Repository.Interfaces;
+using Company.Service.Dto;
 using Company.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
@@ -26,7 +27,7 @@ namespace Company.Web.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Department department)
+        public IActionResult Create(DepartmentDto department)
         {
             try
             {

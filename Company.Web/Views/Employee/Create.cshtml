@@ -1,10 +1,13 @@
-﻿@model Employee
+﻿@model EmployeeDto
+
+@{
+    var departments = new SelectList(ViewBag.Departments, nameof(DepartmentDto.Id), nameof(DepartmentDto.Name));   
+}
 
 @* @{
-    var departments = new SelectList(ViewBag.Departments, nameof(Department.Id), nameof(Department.Name));   
+    var departments = ViewBag.Departments as List<DepartmentDto>;
 }
  *@
-
 @* <div class="mt-5 alert alert-warning">
     <h3>@ViewBag.Message</h3>
 </div>
@@ -12,7 +15,7 @@
     <h3>@ViewData["TxtMessage"]</h3>
 </div> *@
 
-<form asp-action="Create">
+<form asp-action="Create" enctype="multipart/form-data">
     <div class="form-group">
         <label class="col-form-label" asp-for="Name"></label>
         <input type="text" asp-for="Name" class="form-control" />
@@ -20,7 +23,7 @@
     </div>
     <div class="form-group">
         <label class="col-form-label" asp-for="Age"></label>
-        <input type="number" asp-for="Age" class="form-control" min="0" />
+        <input type="number" asp-for="Age" class="form-control" />
         <span asp-validation-for="Age" class="text-danger"></span>
     </div>
     <div class="form-group">
@@ -31,11 +34,11 @@
     <div class="form-group">
         <label class="col-form-label" asp-for="Salary"></label>
         <input type="number" asp-for="Salary" class="form-control" />
-        <span asp-validation-for="Salary" class="text-danger" step="0.01" min="0"></span>
+        <span asp-validation-for="Salary" class="text-danger" step="0.01" ></span>
     </div>
     <div class="form-group">
         <label class="col-form-label" asp-for="Email"></label>
-        <input type="text" asp-for="Email" class="form-control" />
+        <input type="email" asp-for="Email" class="form-control" />
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
     <div class="form-group">
@@ -46,24 +49,31 @@
     <div class="form-group">
         <label class="col-form-label" asp-for="HiringDate"></label>
         <input type="date" asp-for="HiringDate" class="form-control" />
-        
+        <span asp-validation-for="HiringDate" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label class="col-form-label" asp-for="Department"></label>
-        @Html.DropDownListFor(model => model.DepartmentId, new SelectList(ViewBag.Departments, nameof(Department.Id), nameof(Department.Name)), "Select a department", new { @class = "form-control" })
-        @* <select name="DepartmentId" id="DepartmentId" class="form-control">
-            <option value="">__Select a department__</option>
-            @foreach (var department in ViewBag.Departments)
+        @Html.DropDownListFor(model => model.DepartmentId, departments, "-- Select a department --", new { @class = "form-control" })
+        <span asp-validation-for="DepartmentId" class="text-danger"></span>
+
+       @*  <select name="Department" id="Department" class="form-control">
+            <option value="@null">__Select a department__</option>
+            @foreach (var department in departments)
             {
                 <option value="@department.Id">@department.Name</option>
             }
         </select> *@
+
+       @*  <select class="form-control" asp-items="@departments" asp-for="Department">
+            <option value="@null">-- Select Department --</option>
+        </select> *@
     </div>
 
     <div class="form-group">
-        <label class="col-form-label" asp-for="ImageUrl"></label>
-        <input type="text" asp-for="ImageUrl" class="form-control" />
+        <label class="col-form-label" asp-for="Image"></label>
+        <input type="file" asp-for="Image" class="form-control" />
+        <span asp-validation-for="Image" class="text-danger"></span>
     </div>
 
     <br />
