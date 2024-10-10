@@ -5,6 +5,7 @@ using Company.Repository.Repositories;
 using Company.Service.Interfaces;
 using Company.Service.Mapping;
 using Company.Service.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Company.Web
@@ -40,6 +41,33 @@ namespace Company.Web
             //builder.Services.AddScoped<IGenericRepository<Employee>, GenericRepository<Employee>>();
             //builder.Services.AddScoped<IGenericRepository<Department>, GenericRepository<Department>>();
 
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(config =>
+            {
+                config.Password.RequiredUniqueChars = 2;
+                config.Password.RequireDigit = true;
+                config.Password.RequireUppercase = true;
+                config.Password.RequireLowercase = true;
+                config.Password.RequireNonAlphanumeric = true;
+
+                config.User.RequireUniqueEmail = true;
+
+                config.Lockout.AllowedForNewUsers = true;
+                config.Lockout.MaxFailedAccessAttempts = 3;
+                config.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromHours(1);
+            }).AddEntityFrameworkStores<CompanyDbContext>()
+              .AddDefaultTokenProviders();
+
+            builder.Services.ConfigureApplicationCookie(options => 
+            {
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                options.SlidingExpiration = true;
+                options.LoginPath = "/Account/Login";
+                options.LogoutPath = "/Account/Logout";
+                options.AccessDeniedPath = "/Account/AccessDenied";
+            });
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -55,6 +83,7 @@ namespace Company.Web
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
