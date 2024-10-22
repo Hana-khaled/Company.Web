@@ -54,6 +54,7 @@ namespace Company.Web
                 config.Lockout.AllowedForNewUsers = true;
                 config.Lockout.MaxFailedAccessAttempts = 3;
                 config.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromHours(1);
+
             }).AddEntityFrameworkStores<CompanyDbContext>()
               .AddDefaultTokenProviders();
 
