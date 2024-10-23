@@ -38,51 +38,6 @@ namespace Company.Service.Services
             _unitOfWork.Complete();
         }
 
-        public void Delete(DepartmentDto departmentDto)
-        {
-            //Department department = new Department
-            //{
-            //    Name = departmentDto.Name,
-            //    Code = departmentDto.Code,
-            //    CreatedAt = DateTime.Now,
-            //    Id = departmentDto.Id
-            //};
-
-            Department department = _mapper.Map<Department>(departmentDto);
-            _unitOfWork.departmentRepository.Delete(department);
-
-            _unitOfWork.Complete();
-        }
-
-        public IEnumerable<DepartmentDto> GetAll()
-        {
-            var departments = _unitOfWork.departmentRepository.GetAll().ToList();
-            //return departments.Select(x => new DepartmentDto
-            //{
-            //    Name = x.Name,
-            //    Code = x.Code,
-            //    Id = x.Id
-            //});
-            IEnumerable<DepartmentDto> mappedDept = _mapper.Map<IEnumerable<DepartmentDto>>(departments);
-            return mappedDept;
-            //return _unitOfWork.departmentRepository.GetAll()/*.Where(x=>x.IsDeleted != true)*/;//soft delete
-        }
-
-        public DepartmentDto GetById(int? id)
-        {
-            if(id is null)
-            {
-                return null;
-            }
-            var dept = _unitOfWork.departmentRepository.GetById(id.Value);
-            if (dept is null)
-            {
-                return null;
-            }
-            DepartmentDto mappedDept = _mapper.Map<DepartmentDto>(dept);
-            return mappedDept;
-        }
-
         public void Update(Department department)
         {
             var dept = GetById(department.Id);
@@ -99,5 +54,51 @@ namespace Company.Service.Services
             _unitOfWork.departmentRepository.Update(department);
             _unitOfWork.Complete();
         }
+
+        public void Delete(DepartmentDto departmentDto)
+        {
+            //Department department = new Department
+            //{
+            //    Name = departmentDto.Name,
+            //    Code = departmentDto.Code,
+            //    CreatedAt = DateTime.Now,
+            //    Id = departmentDto.Id
+            //};
+
+            Department department = _mapper.Map<Department>(departmentDto);
+            _unitOfWork.departmentRepository.Delete(department);
+
+            _unitOfWork.Complete();
+        }
+
+        public DepartmentDto GetById(int? id)
+        {
+            if (id is null)
+            {
+                return null;
+            }
+            var dept = _unitOfWork.departmentRepository.GetById(id.Value);
+            if (dept is null)
+            {
+                return null;
+            }
+            DepartmentDto mappedDept = _mapper.Map<DepartmentDto>(dept);
+            return mappedDept;
+        }
+
+        public IEnumerable<DepartmentDto> GetAll()
+        {
+            var departments = _unitOfWork.departmentRepository.GetAll().ToList();
+            //return departments.Select(x => new DepartmentDto
+            //{
+            //    Name = x.Name,
+            //    Code = x.Code,
+            //    Id = x.Id
+            //});
+            IEnumerable<DepartmentDto> mappedDept = _mapper.Map<IEnumerable<DepartmentDto>>(departments);
+            return mappedDept;
+            //return _unitOfWork.departmentRepository.GetAll()/*.Where(x=>x.IsDeleted != true)*/;//soft delete
+        }
+
     }
 }

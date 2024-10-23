@@ -8,11 +8,14 @@ namespace Company.Web.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
+		private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AccountController(UserManager<ApplicationUser> userManager)
+		public AccountController(UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
-        }
+			_signInManager = signInManager;
+		}
 
         [HttpGet]
         public IActionResult SignUp()
@@ -34,11 +37,12 @@ namespace Company.Web.Controllers
                     IsActive = true
                 };
 
-                var result = await _userManager.CreateAsync(user);
+                // input.Password parameter -> for storing and hashing passsword in database
+                var result = await _userManager.CreateAsync(user, input.Password);
 
                 if (result.Succeeded)
                 {
-                    RedirectToAction("SignIn");
+                    return RedirectToAction("SignIn");
                 }
 
                 foreach(var err in result.Errors)
@@ -48,5 +52,41 @@ namespace Company.Web.Controllers
             }
             return View(input);
         }
-    }
+
+        [HttpGet]
+        public IActionResult SignIn()
+        {
+            return View();
+        }
+
+		[HttpPost]
+		public async Task<IActionResult> SignIn(SignInViewModel model)
+		{
+			if(ModelState.IsValid)
+            {
+                // Getting user with the specified email
+                var user = await _userManager.FindByEmailAsync(model.Email);
+
+                if(user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+                {
+                    var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
+                    if(result.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
+
+                ModelState.AddModelError("", "Invalid SignIn");
+                return View(model);
+            }
+
+            return View(model);
+		}
+
+        public async Task<IActionResult> SignOut()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction(nameof(SignIn));
+        }
+	}
 }
