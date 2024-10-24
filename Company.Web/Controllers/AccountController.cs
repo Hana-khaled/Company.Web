@@ -1,7 +1,9 @@
 ﻿using Company.Data.Models;
 using Company.Web.Models;
+using Company.Service.Helper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Common;
 
 namespace Company.Web.Controllers
 {
@@ -67,7 +69,7 @@ namespace Company.Web.Controllers
                 // Getting user with the specified email
                 var user = await _userManager.FindByEmailAsync(model.Email);
 
-                if(user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+                if (user is not null && await _userManager.CheckPasswordAsync(user, model.Password))
                 {
                     var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
                     if(result.Succeeded)
@@ -87,6 +89,49 @@ namespace Company.Web.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction(nameof(SignIn));
+        }
+
+        [HttpGet]
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ForgetPassword(ForgetPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if(user is not null)
+                {
+                    // linking email to reciever email
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                    // creating URL
+                    var url = Url.Action("ForgetPassword", "Account",
+                        new { Email = model.Email, Token = token }, Request.Scheme);
+
+                    // Handling email structure
+                    var email = new Email
+                    {
+                        To = model.Email,
+                        Subject = "Reset Password",
+                        Body = url
+                    };
+
+                    // Sending email
+                    EmailSettings.SendEmail(email);
+
+                    return RedirectToAction(nameof(CheckYourInbox));
+
+                }
+            }
+            return View(model);
+        }
+
+        public IActionResult CheckYourInbox()
+        {
+            return View();
         }
 	}
 }
