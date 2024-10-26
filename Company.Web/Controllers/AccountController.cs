@@ -108,7 +108,7 @@ namespace Company.Web.Controllers
                     var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
                     // creating URL
-                    var url = Url.Action("ForgetPassword", "Account",
+                    var url = Url.Action("ResetPassword", "Account",
                         new { Email = model.Email, Token = token }, Request.Scheme);
 
                     // Handling email structure
@@ -132,6 +132,35 @@ namespace Company.Web.Controllers
         public IActionResult CheckYourInbox()
         {
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult ResetPassword(string email, string token)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if(user is not null)
+                {
+                    var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction(nameof(SignIn));
+                    }
+                    foreach(var err in result.Errors)
+                    {
+                        ModelState.AddModelError("", err.Description);
+                    }
+                }
+            }
+
+            return View(model);
         }
 	}
 }
