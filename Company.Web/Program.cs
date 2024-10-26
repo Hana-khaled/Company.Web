@@ -54,6 +54,7 @@ namespace Company.Web
                 config.Lockout.AllowedForNewUsers = true;
                 config.Lockout.MaxFailedAccessAttempts = 3;
                 config.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromHours(1);
+
             }).AddEntityFrameworkStores<CompanyDbContext>()
               .AddDefaultTokenProviders();
 
@@ -88,7 +89,8 @@ namespace Company.Web
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                //pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Account}/{action=SignUp}");
 
             app.Run();
         }
