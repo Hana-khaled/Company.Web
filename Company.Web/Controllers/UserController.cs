@@ -86,9 +86,13 @@ namespace Company.Web.Controllers
 
 					if (result.Succeeded)
 					{
-						_logger.LogInformation("User Updated Successfully");
+						_logger.LogInformation("The User is Updated Successfully");
 						return RedirectToAction(nameof(Index));
 					}
+					//else
+					//{
+					//	throw new Exception("Failed User Update");
+					//}
 
 				}
 				catch (Exception ex)
@@ -99,5 +103,39 @@ namespace Company.Web.Controllers
 
 			return View(model);
         }
+
+		public async Task<IActionResult> Delete(string id)
+		{
+			try
+			{
+                var user = await _userManager.FindByIdAsync(id);
+                if (user is null)
+                {
+                    return NotFound();
+                }
+				// Soft deleting -  go to CompanyDbContext class at OnModelCreating
+				user.IsActive = false;
+                var result = await _userManager.UpdateAsync(user);
+
+				// Hard deleting
+                //var result = await _userManager.DeleteAsync(user);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                foreach (var err in result.Errors)
+                {
+                    _logger.LogError(err.Description);
+                }
+            }
+			catch (Exception ex)
+			{
+				_logger.LogError(ex.Message);
+			}
+
+			return RedirectToAction(nameof(Index));
+		}
     }
 }

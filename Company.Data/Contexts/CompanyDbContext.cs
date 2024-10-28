@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Company.Data.Contexts
 {
-    public class CompanyDbContext : IdentityDbContext
+    public class CompanyDbContext : IdentityDbContext<ApplicationUser>
     {
         public CompanyDbContext(DbContextOptions options): base(options)
         {
@@ -20,6 +20,9 @@ namespace Company.Data.Contexts
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(modelBuilder);
+
+            // for Soft Deleting the users
+            modelBuilder.Entity<ApplicationUser>().HasQueryFilter(x => x.IsActive == true);
         }
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
