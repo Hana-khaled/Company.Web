@@ -162,5 +162,10 @@ namespace Company.Web.Controllers
 
             return View(model);
         }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
 	}
 }
